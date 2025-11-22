@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGL 3D Word Logo</title>
+
+    <style>
+        body { margin: 0; background: #111; color: white; overflow: hidden; }
+        #gl-canvas { width: 100vw; height: 100vh; display: block; }
+        #ui-panel {
+            position: absolute; top: 20px; left: 20px;
+            padding: 15px; background: rgba(0,0,0,0.6); border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="gl-canvas"></canvas>
+
+<!-- ===================== -->
+<!-- UI PANEL              -->
+<!-- ===================== -->
+<div id="ui-panel">
+    <label>Extrusion Depth</label><br>
+    <input type="range" id="extrudeDepth" min="0.1" max="2.0" step="0.1" value="1"><br><br>
+
+    <label>Speed</label><br>
+    <input type="range" id="speed" min="0.5" max="3" step="0.1" value="1"><br><br>
+
+    <button id="startBtn">Start Animation</button>
+    <button id="resetBtn">Reset</button>
+</div>
+
+<!-- Load global utils -->
+<script src="src/utils/webgl-utils.js"></script>
+<script src="src/utils/initShaders.js"></script>
+<script src="src/utils/MV.js"></script>
+
+<!-- Load entry module -->
+<script type="module" src="src/main.js"></script>
+
+</body>
+</html>
