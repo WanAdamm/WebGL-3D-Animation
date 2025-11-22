@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>WebGL 3D Word Logo</title>
-    
+
     <!-- Load global utils -->
     <script src="src/utils/webgl-utils.js"></script>
     <script src="src/utils/initShaders.js"></script>
@@ -20,19 +20,34 @@
             overflow: hidden;
         }
 
-        #gl-canvas {
+        /* Canvas container */
+        .canvas {
             width: 100vw;
             height: 100vh;
-            display: block;
         }
 
+        /* WebGL canvas styling */
+        #gl-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            /* removes inline gap */
+            border: 4px solid antiquewhite;
+            box-sizing: border-box;
+        }
+
+        /* Floating UI panel */
         #ui-panel {
-            position: absolute;
+            position: fixed;
+            /* stays on top, independent of layout */
             top: 20px;
             left: 20px;
             padding: 15px;
             background: rgba(0, 0, 0, 0.6);
             border-radius: 8px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            /* guarantee overlap above canvas */
         }
     </style>
 </head>
