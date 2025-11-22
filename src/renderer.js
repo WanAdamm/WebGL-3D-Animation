@@ -39,6 +39,7 @@ export function drawScene() {
     false,
     flatten(mat4())
   );
+  
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uProjection"),
     false,

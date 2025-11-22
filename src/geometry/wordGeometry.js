@@ -9,12 +9,12 @@ export function buildWord(word, depth) {
   for (let ch of word) {
     const g = buildLetter(ch, depth);
 
-    for (let v of g.vertices) verts.push([v[0] + x, v[1], v[2]]);
+    for (let v of g.vertices) verts.push([v[0] + x, v[1], v[2]]); // shift letter horizontally so that it appears side by side
 
     for (let i of g.indices) idx.push(i + offset);
 
     offset += g.vertices.length;
-    x += 2;
+    x += 2; // fixed horizontal spacing
   }
 
   return { vertices: verts, indices: idx };
@@ -36,13 +36,17 @@ function letterT(depth) {
 }
 
 function letterV(depth) {
-  const L = extrudeShape(createRectangle(0.3, 1.5), depth);
-  const R = extrudeShape(createRectangle(0.3, 1.5), depth);
+  const V_outline = [
+    [-0.6, 0.75],
+    [-0.3, -0.75],
+    [0.3, -0.75],
+    [0.6, 0.75],
+  ];
 
-  for (let v of L.vertices) v[0] -= 0.5;
-  for (let v of R.vertices) v[0] += 0.5;
+  // Your extruder must accept a list of 2D points
+  const geom = extrudeShape(V_outline, depth);
 
-  return merge(L, R);
+  return geom;
 }
 
 function merge(a, b) {
