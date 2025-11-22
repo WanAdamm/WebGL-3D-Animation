@@ -4,6 +4,7 @@ let speed = 1;
 
 export function animate(dt) {
     if (!running) return;
+    console.log("animate") //TODO: remove this
     rotation += 0.01 * speed;
 }
 

@@ -7,11 +7,11 @@ import { createProgramFromSources } from "./utils/shaderUtils.js";
 
 let gl, program, geometry;
 
-window.addEventListener("DOMContentLoaded", async () => {
+window.onload = async () => {
   const canvas = document.getElementById("gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas);
 
-  // Load shader sources here
+  // Load shader sources AFTER page + assets are ready
   const vsSource = await loadText("src/shaders/vertexShader.glsl");
   const fsSource = await loadText("src/shaders/fragmentShader.glsl");
 
@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   });
 
   requestAnimationFrame(loop);
-});
+};
 
 function loop(t) {
   animate(t);
