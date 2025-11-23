@@ -20,6 +20,22 @@ export function buildWord(word, depth) {
   return { vertices: verts, indices: idx };
 }
 
+// convert JS Array to vec3
+function convertVerticesToVec3(shape) {
+    for (let i = 0; i < shape.vertices.length; i++) {
+        const p = shape.vertices[i];
+        shape.vertices[i] = vec3(p[0], p[1], p[2]);
+    }
+}
+
+// to scale the shape
+function scaleShape(shape, s) {
+  for (let i = 0; i < shape.vertices.length; i++) {
+    shape.vertices[i] = mult(s, shape.vertices[i]);
+  }
+}
+
+
 function buildLetter(ch, depth) {
   if (ch === "T") return letterT(depth);
   if (ch === "V") return letterV(depth);
@@ -30,8 +46,18 @@ function letterT(depth) {
   const top = extrudeShape(createRectangle(1.5, 0.3), depth);
   const stem = extrudeShape(createRectangle(0.3, 1.5), depth);
 
+  // move stem down by adjusting the y-coord
   for (let v of stem.vertices) v[1] -= 0.6;
 
+  // convert top and stem coord array to vec3
+  convertVerticesToVec3(top);
+  convertVerticesToVec3(stem);
+
+  // scale both parts by -2  (this flips + scales)
+  scaleShape(top, 0.5);
+  scaleShape(stem, 0.5);
+
+  // returned the merged top and stem part the letter T
   return merge(top, stem);
 }
 
