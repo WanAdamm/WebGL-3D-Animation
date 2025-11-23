@@ -29,6 +29,10 @@ export function initRenderer(_gl, _program, geometry) {
   const scaleLoc = gl.getUniformLocation(program, "uScale");
   gl.uniform3f(scaleLoc, 0.5, 0.5, 0.5); // scale to 50%
 
+  // For rotation
+  const uRotationLoc = gl.getUniformLocation(program, "uRotation");
+  let R = rotate(10, [0, 1, 1]); // rotates clockwise around y
+  gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.enable(gl.DEPTH_TEST);
   gl.clearColor(0, 0, 0, 1);
