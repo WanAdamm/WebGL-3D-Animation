@@ -25,6 +25,11 @@ export function initRenderer(_gl, _program, geometry) {
   gl.vertexAttribPointer(vPos, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPos);
 
+  // For scaling
+  const scaleLoc = gl.getUniformLocation(program, "uScale");
+  gl.uniform3f(scaleLoc, 0.5, 0.5, 0.5); // scale to 50%
+
+
   gl.enable(gl.DEPTH_TEST);
   gl.clearColor(0, 0, 0, 1);
 }
@@ -39,7 +44,7 @@ export function drawScene() {
     false,
     flatten(mat4())
   );
-  
+
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uProjection"),
     false,

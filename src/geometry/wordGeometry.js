@@ -1,5 +1,8 @@
 import { createRectangle, extrudeShape } from "./shapes.js";
 
+let TBottom = 0;
+let TTop = 0;
+
 export function buildWord(word, depth) {
   let verts = [];
   let idx = [];
@@ -14,7 +17,7 @@ export function buildWord(word, depth) {
     for (let i of g.indices) idx.push(i + offset);
 
     offset += g.vertices.length;
-    x += 2; // fixed horizontal spacing
+    x += 0.8; // fixed horizontal spacing
   }
 
   return { vertices: verts, indices: idx };
@@ -22,10 +25,10 @@ export function buildWord(word, depth) {
 
 // convert JS Array to vec3
 function convertVerticesToVec3(shape) {
-    for (let i = 0; i < shape.vertices.length; i++) {
-        const p = shape.vertices[i];
-        shape.vertices[i] = vec3(p[0], p[1], p[2]);
-    }
+  for (let i = 0; i < shape.vertices.length; i++) {
+    const p = shape.vertices[i];
+    shape.vertices[i] = vec3(p[0], p[1], p[2]);
+  }
 }
 
 // to scale the shape
@@ -34,7 +37,6 @@ function scaleShape(shape, s) {
     shape.vertices[i] = mult(s, shape.vertices[i]);
   }
 }
-
 
 function buildLetter(ch, depth) {
   if (ch === "T") return letterT(depth);
@@ -49,13 +51,11 @@ function letterT(depth) {
   // move stem down by adjusting the y-coord
   for (let v of stem.vertices) v[1] -= 0.6;
 
-  // convert top and stem coord array to vec3
-  convertVerticesToVec3(top);
-  convertVerticesToVec3(stem);
+  const bottomT = Math.min(...stem.vertices[1]); // return lowestpoint of the letter T
+  TBottom = bottomT; // passing to global var 
 
-  // scale both parts by -2  (this flips + scales)
-  scaleShape(top, 0.5);
-  scaleShape(stem, 0.5);
+  const topT = Math.max(...stem.vertices[1]); // return highestpoint of the letter T
+  TTop = topT; // passing to global var 
 
   // returned the merged top and stem part the letter T
   return merge(top, stem);
@@ -63,13 +63,12 @@ function letterT(depth) {
 
 function letterV(depth) {
   const V_outline = [
-    [-0.6, 0.75],
-    [-0.3, -0.75],
-    [0.3, -0.75],
-    [0.6, 0.75],
+    [-0.6, TTop],
+    [-0.3, TBottom],
+    [0.3, TBottom],
+    [0.6, TTop],
   ];
 
-  // Your extruder must accept a list of 2D points
   const geom = extrudeShape(V_outline, depth);
 
   return geom;
