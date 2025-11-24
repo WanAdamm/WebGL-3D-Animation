@@ -14,7 +14,7 @@ export function buildWord(word, depth) {
     for (let i of g.indices) idx.push(i + offset);
 
     offset += g.vertices.length;
-    x += 1.5; // fixed horizontal spacing
+    x += 1.0; // fixed horizontal spacing
   }
 
   return { vertices: verts, indices: idx };
