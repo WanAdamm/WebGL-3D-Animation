@@ -31,7 +31,7 @@ export function initRenderer(_gl, _program, geometry) {
 
   // For rotation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
-  let R = rotate(10, [0, 1, 1]); // rotates clockwise around y
+  let R = rotate(0, [0, 1, 1]); // rotates clockwise around y
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.enable(gl.DEPTH_TEST);
