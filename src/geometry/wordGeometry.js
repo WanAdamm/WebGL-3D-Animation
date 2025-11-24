@@ -1,8 +1,5 @@
 import { createRectangle, extrudeShape } from "./shapes.js";
 
-let TBottom = 0;
-let TTop = 0;
-
 export function buildWord(word, depth) {
   let verts = [];
   let idx = [];
@@ -17,30 +14,16 @@ export function buildWord(word, depth) {
     for (let i of g.indices) idx.push(i + offset);
 
     offset += g.vertices.length;
-    x += 0.8; // fixed horizontal spacing
+    x += 1.5; // fixed horizontal spacing
   }
 
   return { vertices: verts, indices: idx };
 }
 
-// convert JS Array to vec3
-function convertVerticesToVec3(shape) {
-  for (let i = 0; i < shape.vertices.length; i++) {
-    const p = shape.vertices[i];
-    shape.vertices[i] = vec3(p[0], p[1], p[2]);
-  }
-}
-
-// to scale the shape
-function scaleShape(shape, s) {
-  for (let i = 0; i < shape.vertices.length; i++) {
-    shape.vertices[i] = mult(s, shape.vertices[i]);
-  }
-}
-
 function buildLetter(ch, depth) {
   if (ch === "T") return letterT(depth);
   if (ch === "V") return letterV(depth);
+  if (ch === "1") return letter1(depth);
   return extrudeShape(createRectangle(1, 1), depth);
 }
 
@@ -51,27 +34,66 @@ function letterT(depth) {
   // move stem down by adjusting the y-coord
   for (let v of stem.vertices) v[1] -= 0.6;
 
-  const bottomT = Math.min(...stem.vertices[1]); // return lowestpoint of the letter T
-  TBottom = bottomT; // passing to global var 
-
-  const topT = Math.max(...stem.vertices[1]); // return highestpoint of the letter T
-  TTop = topT; // passing to global var 
-
   // returned the merged top and stem part the letter T
   return merge(top, stem);
 }
 
 function letterV(depth) {
-  const V_outline = [
-    [-0.6, TTop],
-    [-0.3, TBottom],
-    [0.3, TBottom],
-    [0.6, TTop],
-  ];
+  const legWidth = 0.25;
+  const legHeight = 1.5;
+  const legTilt = 25; // degrees
+  const legGap = 0.23; // tiny spacing so legs don’t overlap visually
 
-  const geom = extrudeShape(V_outline, depth);
+  // Build two vertical legs, centered at origin (MV.js style)
+  const leftLeg = extrudeShape(createRectangle(legWidth, legHeight), depth);
+  const rightLeg = extrudeShape(createRectangle(legWidth, legHeight), depth);
 
-  return geom;
+  for (let v of leftLeg.vertices) v[1] -= 0.6;
+  for (let v of rightLeg.vertices) v[1] -= 0.6;
+
+  // We want the legs to meet at the BOTTOM, so pivot at bottom centre:
+  const pivotY = -legHeight / 2; // bottom of the rectangle
+
+  function rotateGeom(geom, M) {
+    for (let i = 0; i < geom.vertices.length; i++) {
+      let v = geom.vertices[i]; // [x, y, z]
+
+      // 1. move pivot to origin (y - pivotY; pivotY is negative → adds)
+      let x = v[0];
+      let y = v[1] - pivotY;
+      let z = v[2];
+
+      // 2. manual vec4
+      const p = [x, y, z, 1.0];
+
+      // 3. apply rotation
+      const r = mult(M, vec4(p)); // mat4 × vec4
+
+      // 4. move pivot back and store
+      geom.vertices[i] = vec3(r[0], r[1] + pivotY, r[2]);
+    }
+  }
+
+  // Left leg tilts towards the right (top goes right)
+  const M_left = rotate(-legTilt, [0, 0, 1]);
+  // Right leg tilts towards the left (top goes left)
+  const M_right = rotate(legTilt, [0, 0, 1]);
+
+  rotateGeom(leftLeg, M_left);
+  rotateGeom(rightLeg, M_right);
+
+  // Tiny horizontal nudge so they don’t perfectly overlap at bottom
+  for (let v of leftLeg.vertices) v[0] -= legGap;
+  for (let v of rightLeg.vertices) v[0] += legGap;
+
+  return merge(leftLeg, rightLeg);
+}
+
+function letter1(depth) {
+  const one = extrudeShape(createRectangle(0.3, 1.5), depth);
+  for (let v of one.vertices) v[1] -= 0.6;
+
+  return one;
 }
 
 function merge(a, b) {

@@ -18,11 +18,11 @@ window.onload = async () => {
   program = createProgramFromSources(gl, vsSource, fsSource);
   gl.useProgram(program);
 
-  geometry = buildWord("TV", 1.0);
+  geometry = buildWord("TV1", 1.0);
   initRenderer(gl, program, geometry);
 
   setupUI((depth) => {
-    geometry = buildWord("TV", depth);
+    geometry = buildWord("TV1", depth);
     initRenderer(gl, program, geometry);
   });
 

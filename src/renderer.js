@@ -1,3 +1,5 @@
+import { state } from "./animation.js";
+
 let gl, program;
 let buffers = {};
 
@@ -27,7 +29,7 @@ export function initRenderer(_gl, _program, geometry) {
 
   // For scaling
   const scaleLoc = gl.getUniformLocation(program, "uScale");
-  gl.uniform3f(scaleLoc, 0.5, 0.5, 0.5); // scale to 50%
+  gl.uniform3f(scaleLoc, 0.3, 0.3, 0.3); // scale to 50%
 
   // For rotation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
@@ -48,6 +50,7 @@ export function drawScene() {
     false,
     flatten(mat4())
   );
+
 
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uProjection"),

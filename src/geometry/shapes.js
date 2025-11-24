@@ -4,7 +4,7 @@ export function createRectangle(w, h) {
         [-w, -h, 0],
         [ w, -h, 0],
         [ w,  h, 0],
-        [-w,  h, 0],
+        [-w,  h, 0]
     ];
 }
 

@@ -1,21 +1,23 @@
-let running = false;
-let rotation = 0;
-let speed = 1;
+export const state = {
+    running: false,
+    rotation: 0,
+    speed: 1
+};
 
 export function animate(dt) {
-    if (!running) return;
-    rotation += 0.01 * speed;
+    if (!state.running) return;
+    state.rotation += 0.01 * state.speed;
 }
 
 export function startAnimation() {
-    running = true;
+    state.running = true;
 }
 
 export function setSpeed(s) {
-    speed = s;
+    state.speed = s;
 }
 
 export function resetAnimation() {
-    running = false;
-    rotation = 0;
+    state.running = false;
+    state.rotation = 0;
 }
