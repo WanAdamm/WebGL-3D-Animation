@@ -28,8 +28,8 @@ function buildLetter(ch, depth) {
 }
 
 function letterT(depth) {
-  const top = extrudeShape(createRectangle(1.5, 0.3), depth);
-  const stem = extrudeShape(createRectangle(0.3, 1.5), depth);
+  const top = extrudeShape(createRectangle(0.7, 0.3), depth);
+  const stem = extrudeShape(createRectangle(0.2, 1.5), depth);
 
   // move stem down by adjusting the y-coord
   for (let v of stem.vertices) v[1] -= 0.6;
@@ -39,61 +39,89 @@ function letterT(depth) {
 }
 
 function letterV(depth) {
-  const legWidth = 0.25;
-  const legHeight = 1.5;
-  const legTilt = 25; // degrees
-  const legGap = 0.23; // tiny spacing so legs don’t overlap visually
+  // width and height of each diagonal stroke
+  const strokeWidth = 0.20;
+  const strokeLength = 1.5;
 
-  // Build two vertical legs, centered at origin (MV.js style)
-  const leftLeg = extrudeShape(createRectangle(legWidth, legHeight), depth);
-  const rightLeg = extrudeShape(createRectangle(legWidth, legHeight), depth);
+  // Create left stroke (\)
+  const left = extrudeShape(
+    createRectangle(strokeWidth, strokeLength),
+    depth
+  );
 
-  for (let v of leftLeg.vertices) v[1] -= 0.6;
-  for (let v of rightLeg.vertices) v[1] -= 0.6;
+  // Create right stroke (/)
+  const right = extrudeShape(
+    createRectangle(strokeWidth, strokeLength),
+    depth
+  );
 
-  // We want the legs to meet at the BOTTOM, so pivot at bottom centre:
-  const pivotY = -legHeight / 2; // bottom of the rectangle
-
-  function rotateGeom(geom, M) {
-    for (let i = 0; i < geom.vertices.length; i++) {
-      let v = geom.vertices[i]; // [x, y, z]
-
-      // 1. move pivot to origin (y - pivotY; pivotY is negative → adds)
-      let x = v[0];
-      let y = v[1] - pivotY;
-      let z = v[2];
-
-      // 2. manual vec4
-      const p = [x, y, z, 1.0];
-
-      // 3. apply rotation
-      const r = mult(M, vec4(p)); // mat4 × vec4
-
-      // 4. move pivot back and store
-      geom.vertices[i] = vec3(r[0], r[1] + pivotY, r[2]);
-    }
+  // rotate the strokes
+  for (let v of left.vertices) {
+    const x = v[0], y = v[1];
+    v[0] = x * Math.cos(0.10) - y * Math.sin(0.10);
+    v[1] = x * Math.sin(0.10) + y * Math.cos(0.10);
   }
 
-  // Left leg tilts towards the right (top goes right)
-  const M_left = rotate(-legTilt, [0, 0, 1]);
-  // Right leg tilts towards the left (top goes left)
-  const M_right = rotate(legTilt, [0, 0, 1]);
+  for (let v of right.vertices) {
+    const x = v[0], y = v[1];
+    v[0] = x * Math.cos(-0.13) - y * Math.sin(-0.10);
+    v[1] = x * Math.sin(-0.10) + y * Math.cos(-0.13);
+  }
 
-  rotateGeom(leftLeg, M_left);
-  rotateGeom(rightLeg, M_right);
+  // shift them apart to form the V shape
+  for (let v of left.vertices) v[0] -= 0.13;
+  for (let v of right.vertices) v[0] += 0.13;
 
-  // Tiny horizontal nudge so they don’t perfectly overlap at bottom
-  for (let v of leftLeg.vertices) v[0] -= legGap;
-  for (let v of rightLeg.vertices) v[0] += legGap;
+  // vertically align to shift V upwards
+  for (let v of left.vertices)  v[1] -= 0.65;
+  for (let v of right.vertices) v[1] -= 0.65;
 
-  return merge(leftLeg, rightLeg);
+  return merge(left, right);
 }
 
 function letter1(depth) {
-  const one = extrudeShape(createRectangle(0.3, 1.5), depth);
-  for (let v of one.vertices) v[1] -= 0.6;
+  // vertical stem
+  const stem = extrudeShape(
+    createRectangle(0.20, 1.3),
+    depth
+  );
 
-  return one;
+  // bottom base
+  const base = extrudeShape(
+    createRectangle(0.35, 0.25),
+    depth
+  );
+
+  // slanted top (a thin rectangle rotated slightly)
+  const top = extrudeShape(
+    createRectangle(0.36, 0.22),
+    depth
+  );
+
+  // shift the stem down a bit to match T and V alignment
+  for (let v of stem.vertices) {
+    v[1] -= 0.53;
+  }
+
+  // rotate the top bar slightly (like a handwriting slanted "1")
+  for (let v of top.vertices) {
+    const x = v[0], y = v[1];
+    v[0] = x * Math.cos(0.65) - y * Math.sin(0.65);
+    v[1] = x * Math.sin(0.65) + y * Math.cos(0.65);
+  }
+
+  // move top bar 
+  for (let v of top.vertices) {
+    v[1] += 0.10; //vertically
+    v[0] -= 0.11; //horizontally
+  }
+
+  // position bottom base under the stem
+  for (let v of base.vertices) {
+    v[1] -= 1.30;
+  }
+
+  return merge(merge(stem, base), top);
 }
 
 function merge(a, b) {
