@@ -3,11 +3,17 @@ export const state = {
   rotation: 0,
   speed: 1,
   scale: 0.2,
+  direction: 1,
 };
 
 export function animate(dt) {
   if (!state.running) return;
-  state.rotation += 1 * state.speed;
+
+  console.log(state.rotation)
+  if(state.rotation > 180) state.direction = -1;
+  if(state.rotation < -180) state.direction = 1;
+
+  state.rotation += 1 * state.direction * state.speed;
 }
 
 export function startAnimation() {

@@ -65,7 +65,6 @@ export function drawScene() {
   // controlling rotation during animation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
   let R = rotate(state.rotation, [0, 0, 1]); // rotates clockwise around y
-  console.log(state.rotation);
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
