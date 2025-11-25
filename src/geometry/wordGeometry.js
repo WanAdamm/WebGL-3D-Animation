@@ -34,8 +34,10 @@ function letterT(depth) {
   const top = extrudeShape(createRectangle(0.7, 0.3), depth);
   const stem = extrudeShape(createRectangle(0.2, 1.5), depth);
 
-  // move stem down by adjusting the y-coord
+  // move stem up by adjusting the y-coord
   for (let v of top.vertices) v[1] += 0.6;
+
+  // shift x position to the center
   for (let v of stem.vertices) v[0] -= centering;
   for (let v of top.vertices) v[0] -= centering;
 
@@ -76,6 +78,7 @@ function letterV(depth) {
   for (let v of left.vertices) v[0] -= 0.13;
   for (let v of right.vertices) v[0] += 0.13;
 
+  // shift x position to the center
   for (let v of left.vertices) v[0] -= centering;
   for (let v of right.vertices) v[0] -= centering;
 
@@ -114,10 +117,12 @@ function letter1(depth) {
     v[1] -= 1.3;
   }
 
+  // shift x position to the center
   for (let v of stem.vertices) v[0] -= centering;
   for (let v of top.vertices) v[0] -= centering;
   for (let v of base.vertices) v[0] -= centering;
 
+  //shift y position to the center
   var lowOne = Math.min(...base.vertices.map(v => v[1]));
   var upFactor = lowpoint - lowOne;
   for (let v of stem.vertices) v[1] += upFactor;

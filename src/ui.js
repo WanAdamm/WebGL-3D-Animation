@@ -10,5 +10,5 @@ export function setupUI(onDepthChange) {
     speed.oninput = e => setSpeed(parseFloat(e.target.value));
 
     startBtn.onclick = () => startAnimation();
-    resetBtn.onclick = () => resetAnimation();
+    resetBtn.onclick = () => resetAnimation(depth, speed);
 }

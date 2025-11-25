@@ -27,13 +27,13 @@ export function initRenderer(_gl, _program, geometry) {
   gl.vertexAttribPointer(vPos, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPos);
 
-  // For scaling
+  // For default scaling
   const scaleLoc = gl.getUniformLocation(program, "uScale");
   gl.uniform3f(scaleLoc, 0.2, 0.2, 0.2); // scale to 50%
 
-  // For rotation
+  // For default rotation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
-  let R = rotate(0, [0, 1, 1]); // rotates clockwise around y
+  let R = rotate(state.rotation, [0, 0, 0]); // rotates clockwise around y
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.enable(gl.DEPTH_TEST);
@@ -57,6 +57,10 @@ export function drawScene() {
     false,
     flatten(mat4())
   );
+
+  const uRotationLoc = gl.getUniformLocation(program, "uRotation");
+  let R = rotate(state.rotation, [1, 1, 1]); // rotates clockwise around y
+  gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
 }
