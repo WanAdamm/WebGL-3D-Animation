@@ -29,11 +29,11 @@ export function initRenderer(_gl, _program, geometry) {
 
   // For default scaling
   const scaleLoc = gl.getUniformLocation(program, "uScale");
-  gl.uniform3f(scaleLoc, 0.2, 0.2, 0.2); // scale to 50%
+  gl.uniform3f(scaleLoc, 0.2, 0.2, 0.2);
 
   // For default rotation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
-  let R = rotate(state.rotation, [0, 0, 0]); // rotates clockwise around y
+  let R = rotate(state.rotation, [0, 0, 0]);
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.enable(gl.DEPTH_TEST);
@@ -58,14 +58,14 @@ export function drawScene() {
     flatten(mat4())
   );
 
-  // controlling scale during animatio
+  // controlling scale during animation
   const scaleLoc = gl.getUniformLocation(program, "uScale");
   gl.uniform3f(scaleLoc, state.scale, state.scale, state.scale); 
-  console.log(state.scale);
 
   // controlling rotation during animation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
-  let R = rotate(state.rotation, [1, 1, 1]); // rotates clockwise around y
+  let R = rotate(state.rotation, [0, 0, 1]); // rotates clockwise around y
+  console.log(state.rotation);
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
