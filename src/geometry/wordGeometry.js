@@ -1,4 +1,5 @@
 import { createRectangle, extrudeShape } from "./shapes.js";
+import { letterColorsUI } from "../ui.js";
 
 var centering = 1.0;
 let lowpoint = 0;
@@ -15,25 +16,22 @@ export function buildWord(word, depth) {
   for (let ch of word) {
     const g = buildLetter(ch, depth);
 
-    // choose base color per letter
-    let col;
-    if (ch === "T") {
-      // TV1 blue for t
-      col = [0.0, 0.23, 0.8, 1.0];
-    } else if (ch === "V") {
-      // slightly darker blue for v
-      col = [0.0, 0.18, 0.65, 1.0];
-    } else if (ch === "1") {
-      // red for 1
-      col = [0.9, 0.05, 0.1, 1.0];
-    } else {
-      col = [0.5, 0.5, 0.5, 1.0];
-    }
+  // color per letter
+  let col;
+  if (ch === "T") {
+    col = letterColorsUI.T;
+  } else if (ch === "V") {
+    col = letterColorsUI.V;
+  } else if (ch === "1") {
+    col = letterColorsUI.One;
+  } else {
+    col = [0.5, 0.5, 0.5, 1.0];
+  }
 
     // push vertices (with horizontal offset)
     for (let v of g.vertices) {
       verts.push([v[0] + x, v[1], v[2]]);
-      colors.push(col); // same colour for all verts of this letter
+      colors.push([...col]); // same colour for all verts of this letter
     }
 
     // normals (translation doesn't change normals)

@@ -6,6 +6,7 @@ import { loadText } from "./utils/io.js";
 import { createProgramFromSources } from "./utils/shaderUtils.js";
 
 let gl, program, geometry;
+let currentDepth = 1.0;
 
 window.onload = async () => {
   const canvas = document.getElementById("gl-canvas");
@@ -22,11 +23,20 @@ window.onload = async () => {
   initRenderer(gl, program, geometry);
   resizeCanvas();
 
+  setupUI(
+    // onDepthChange
+    (depth) => {
+      currentDepth = depth;
+      geometry = buildWord("TV1", depth);
+      initRenderer(gl, program, geometry);
+    },
 
-  setupUI((depth) => {
-    geometry = buildWord("TV1", depth);
-    initRenderer(gl, program, geometry);
-  });
+    // onRebuildGeometry (for color pickers)
+    () => {
+      geometry = buildWord("TV1", currentDepth);
+      initRenderer(gl, program, geometry);
+    }
+  );
 
   requestAnimationFrame(loop);
 };
