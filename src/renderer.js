@@ -58,6 +58,12 @@ export function drawScene() {
     flatten(mat4())
   );
 
+  // controlling scale during animatio
+  const scaleLoc = gl.getUniformLocation(program, "uScale");
+  gl.uniform3f(scaleLoc, state.scale, state.scale, state.scale); 
+  console.log(state.scale);
+
+  // controlling rotation during animation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
   let R = rotate(state.rotation, [1, 1, 1]); // rotates clockwise around y
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
