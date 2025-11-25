@@ -20,6 +20,8 @@ window.onload = async () => {
 
   geometry = buildWord("TV1", 1.0);
   initRenderer(gl, program, geometry);
+  resizeCanvas();
+
 
   setupUI((depth) => {
     geometry = buildWord("TV1", depth);
@@ -34,3 +36,17 @@ function loop(t) {
   drawScene();
   requestAnimationFrame(loop);
 }
+
+function resizeCanvas() {
+  const canvas = gl.canvas;
+  const displayWidth  = canvas.clientWidth;
+  const displayHeight = canvas.clientHeight;
+
+  if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+    canvas.width  = displayWidth;
+    canvas.height = displayHeight;
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  }
+}
+
+window.addEventListener("resize", resizeCanvas);
