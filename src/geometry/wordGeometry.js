@@ -6,22 +6,51 @@ let lowpoint = 0;
 export function buildWord(word, depth) {
   let verts = [];
   let idx = [];
+  let normals = [];
+  let colors = [];
+
   let offset = 0;
   let x = 0;
 
   for (let ch of word) {
     const g = buildLetter(ch, depth);
 
-    for (let v of g.vertices) verts.push([v[0] + x, v[1], v[2]]); // shift letter horizontally so that it appears side by side
+    // choose base color per letter
+    let col;
+    if (ch === "T") {
+      // TV1 blue for t
+      col = [0.0, 0.23, 0.8, 1.0];
+    } else if (ch === "V") {
+      // slightly darker blue for v
+      col = [0.0, 0.18, 0.65, 1.0];
+    } else if (ch === "1") {
+      // red for 1
+      col = [0.9, 0.05, 0.1, 1.0];
+    } else {
+      col = [0.5, 0.5, 0.5, 1.0];
+    }
 
+    // push vertices (with horizontal offset)
+    for (let v of g.vertices) {
+      verts.push([v[0] + x, v[1], v[2]]);
+      colors.push(col); // same colour for all verts of this letter
+    }
+
+    // normals (translation doesn't change normals)
+    for (let n of g.normals) {
+      normals.push(n);
+    }
+
+    // indices (offset for current word)
     for (let i of g.indices) idx.push(i + offset);
 
     offset += g.vertices.length;
-    x += 1.0; // fixed horizontal spacing
+    x += 1.0; // spacing
   }
 
-  return { vertices: verts, indices: idx };
+  return { vertices: verts, indices: idx, normals, colors };
 }
+
 
 function buildLetter(ch, depth) {
   if (ch === "T") return letterT(depth);
@@ -135,6 +164,11 @@ function letter1(depth) {
 function merge(a, b) {
   return {
     vertices: [...a.vertices, ...b.vertices],
-    indices: [...a.indices, ...b.indices.map((i) => i + a.vertices.length)],
+    indices: [
+      ...a.indices,
+      ...b.indices.map((i) => i + a.vertices.length)
+    ],
+    normals: [...a.normals, ...b.normals],
   };
 }
+
