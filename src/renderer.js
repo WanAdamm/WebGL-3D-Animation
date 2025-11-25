@@ -29,7 +29,7 @@ export function initRenderer(_gl, _program, geometry) {
 
   // For scaling
   const scaleLoc = gl.getUniformLocation(program, "uScale");
-  gl.uniform3f(scaleLoc, 0.3, 0.3, 0.3); // scale to 50%
+  gl.uniform3f(scaleLoc, 0.2, 0.2, 0.2); // scale to 50%
 
   // For rotation
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
