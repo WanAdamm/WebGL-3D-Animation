@@ -89,31 +89,3 @@ export function drawScene() {
 
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
 }
-
-// ----------------------------------------------------
-// Rotation helpers
-// ----------------------------------------------------
-
-function radians(d) { return d * Math.PI / 180; }
-
-function rotateX(a) {
-  let c = Math.cos(radians(a));
-  let s = Math.sin(radians(a));
-  return mat4(
-    1, 0, 0, 0,
-    0, c, -s, 0,
-    0, s,  c, 0,
-    0, 0, 0, 1
-  );
-}
-
-function rotateY(a) {
-  let c = Math.cos(radians(a));
-  let s = Math.sin(radians(a));
-  return mat4(
-     c, 0, s, 0,
-     0, 1, 0, 0,
-    -s, 0, c, 0,
-     0, 0, 0, 1
-  );
-}
