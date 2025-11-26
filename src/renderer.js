@@ -69,7 +69,7 @@ export function drawScene() {
   gl.uniform3f(scaleLoc, state.scale, state.scale, state.scale);
 
   // ----------------------------------------------------
-  // NEW FULL 3D ROTATION MATRIX
+  // 3D ROTATION MATRIX
   // ----------------------------------------------------
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
 
