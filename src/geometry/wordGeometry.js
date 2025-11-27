@@ -16,17 +16,17 @@ export function buildWord(word, depth) {
   for (let ch of word) {
     const g = buildLetter(ch, depth);
 
-  // color per letter
-  let col;
-  if (ch === "T") {
-    col = letterColorsUI.T;
-  } else if (ch === "V") {
-    col = letterColorsUI.V;
-  } else if (ch === "1") {
-    col = letterColorsUI.One;
-  } else {
-    col = [0.5, 0.5, 0.5, 1.0];
-  }
+    // color per letter
+    let col;
+    if (ch === "T") {
+      col = letterColorsUI.T;
+    } else if (ch === "V") {
+      col = letterColorsUI.V;
+    } else if (ch === "1") {
+      col = letterColorsUI.One;
+    } else {
+      col = [0.5, 0.5, 0.5, 1.0];
+    }
 
     // push vertices (with horizontal offset)
     for (let v of g.vertices) {
@@ -49,7 +49,6 @@ export function buildWord(word, depth) {
   return { vertices: verts, indices: idx, normals, colors };
 }
 
-
 function buildLetter(ch, depth) {
   if (ch === "T") return letterT(depth);
   if (ch === "V") return letterV(depth);
@@ -68,7 +67,7 @@ function letterT(depth) {
   for (let v of stem.vertices) v[0] -= centering;
   for (let v of top.vertices) v[0] -= centering;
 
-  let bottomT = Math.min(...stem.vertices.map(v => v[1]));
+  let bottomT = Math.min(...stem.vertices.map((v) => v[1]));
   lowpoint = bottomT;
 
   // returned the merged top and stem part the letter T
@@ -150,7 +149,7 @@ function letter1(depth) {
   for (let v of base.vertices) v[0] -= centering;
 
   //shift y position to the center
-  var lowOne = Math.min(...base.vertices.map(v => v[1]));
+  var lowOne = Math.min(...base.vertices.map((v) => v[1]));
   var upFactor = lowpoint - lowOne;
   for (let v of stem.vertices) v[1] += upFactor;
   for (let v of top.vertices) v[1] += upFactor;
@@ -162,11 +161,7 @@ function letter1(depth) {
 function merge(a, b) {
   return {
     vertices: [...a.vertices, ...b.vertices],
-    indices: [
-      ...a.indices,
-      ...b.indices.map((i) => i + a.vertices.length)
-    ],
+    indices: [...a.indices, ...b.indices.map((i) => i + a.vertices.length)],
     normals: [...a.normals, ...b.normals],
   };
 }
-

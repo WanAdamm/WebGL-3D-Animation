@@ -1,8 +1,8 @@
 export const state = {
   running: false,
 
-  rotationY: 0,    // left/right spin (main)
-  rotationX: 0,    // up/down tilt
+  rotationY: 0, // left/right spin (main)
+  rotationX: 0, // up/down tilt
   rotationZ: 0,
   speed: 1,
 
@@ -11,7 +11,7 @@ export const state = {
   targetScale: 1.2,
 
   phase: 0,
-  timer: 0
+  timer: 0,
 };
 
 // helper: wait X seconds
@@ -46,10 +46,8 @@ export function setSpeed(s) {
 
 export function animate(dt) {
   if (!state.running) return;
-  
 
   switch (state.phase) {
-
     // --------------------------------------------------
     // 1. Rotate right +180
     // --------------------------------------------------
@@ -86,7 +84,7 @@ export function animate(dt) {
     // 5. Scale up to fullscreen
     // --------------------------------------------------
     case 5:
-      state.scale += 0.01 * state.speed;   // apply speed
+      state.scale += 0.01 * state.speed; // apply speed
       if (state.scale >= state.targetScale) {
         state.scale = state.targetScale;
         state.phase = 6;
@@ -97,7 +95,7 @@ export function animate(dt) {
     // 6. Scale down back to original
     // --------------------------------------------------
     case 6:
-      state.scale -= 0.01 * state.speed;   // apply speed
+      state.scale -= 0.01 * state.speed; // apply speed
       if (state.scale <= state.userScale) {
         state.scale = state.userScale;
         state.phase = 7;

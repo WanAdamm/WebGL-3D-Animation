@@ -73,17 +73,16 @@ export function drawScene() {
   // ----------------------------------------------------
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
 
-  let R_z = rotate(state.rotationZ, [0,0,1]);   // main rotation
+  let R_z = rotate(state.rotationZ, [0, 0, 1]); // main rotation
 
   let R = R_z;
 
   // During idle loop, add globe tilt:
   if (state.phase === 7) {
-      let R_y = rotateY(state.rotationY);
-      let R_x = rotateX(state.rotationX);
-      R = mult(R_y, R_x);
+    let R_y = rotateY(state.rotationY);
+    let R_x = rotateX(state.rotationX);
+    R = mult(R_y, R_x);
   }
-
 
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 

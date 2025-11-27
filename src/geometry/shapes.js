@@ -1,11 +1,12 @@
 export function createRectangle(w, h) {
-    w /= 2; h /= 2;
-    return [
-        [-w, -h, 0],
-        [ w, -h, 0],
-        [ w,  h, 0],
-        [-w,  h, 0]
-    ];
+  w /= 2;
+  h /= 2;
+  return [
+    [-w, -h, 0],
+    [w, -h, 0],
+    [w, h, 0],
+    [-w, h, 0],
+  ];
 }
 
 export function extrudeShape(shape, depth) {
@@ -82,5 +83,3 @@ export function extrudeShape(shape, depth) {
 
   return { vertices: verts, normals: normals, indices: idx };
 }
-
-

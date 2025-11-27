@@ -11,13 +11,13 @@ export const letterColorsUI = {
   One: [0.9, 0.05, 0.1, 1.0],
 };
 
-function hexToRGBA(hex){
+function hexToRGBA(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [
     ((n >> 16) & 255) / 255,
     ((n >> 8) & 255) / 255,
     (n & 255) / 255,
-    1.0
+    1.0,
   ];
 }
 
@@ -56,24 +56,24 @@ export function setupUI(onDepthChange, onRebuildGeometry) {
   startBtn.onclick = () => startAnimation();
 
   resetBtn.onclick = () => {
-      // reset animation values
-      resetAnimation(depth, speed, scale);
+    // reset animation values
+    resetAnimation(depth, speed, scale);
 
-      // reset UI color inputs
-      document.getElementById("colorT").value = "#003BE0";
-      document.getElementById("colorV").value = "#002EA6";
-      document.getElementById("color1").value = "#E00019";
+    // reset UI color inputs
+    document.getElementById("colorT").value = "#003BE0";
+    document.getElementById("colorV").value = "#002EA6";
+    document.getElementById("color1").value = "#E00019";
 
-      // reset internal color arrays
-      letterColorsUI.T   = [0.0, 0.23, 0.8, 1.0];
-      letterColorsUI.V   = [0.0, 0.18, 0.65, 1.0];
-      letterColorsUI.One = [0.9, 0.05, 0.1, 1.0];
+    // reset internal color arrays
+    letterColorsUI.T = [0.0, 0.23, 0.8, 1.0];
+    letterColorsUI.V = [0.0, 0.18, 0.65, 1.0];
+    letterColorsUI.One = [0.9, 0.05, 0.1, 1.0];
 
-      onRebuildGeometry();
-  }
+    onRebuildGeometry();
+  };
 
   // Color pickers
-    document.getElementById("colorT").addEventListener("input", (e) => {
+  document.getElementById("colorT").addEventListener("input", (e) => {
     letterColorsUI.T = hexToRGBA(e.target.value);
     onRebuildGeometry();
   });
@@ -86,5 +86,5 @@ export function setupUI(onDepthChange, onRebuildGeometry) {
   document.getElementById("color1").addEventListener("input", (e) => {
     letterColorsUI.One = hexToRGBA(e.target.value);
     onRebuildGeometry();
-  }); 
+  });
 }
