@@ -115,7 +115,7 @@ export function animate(dt) {
   }
 }
 
-export function resetAnimation(depth, speed, scale) {
+export function resetAnimation(depthScale, speedScale, scaleScale) {
   state.running = false;
 
   state.rotationY = 0;
@@ -126,11 +126,11 @@ export function resetAnimation(depth, speed, scale) {
   state.phase = 0;
   state.timer = 0;
 
-  depth.value = depth.defaultValue;
-  speed.value = speed.defaultValue;
-  scale.value = scale.defaultValue;
+  depthScale.value = depthScale.defaultValue;
+  speedScale.value = speedScale.defaultValue;
+  scaleScale.value = scaleScale.defaultValue;
 
-  depth.dispatchEvent(new Event("input"));
-  speed.dispatchEvent(new Event("input"));
-  scale.dispatchEvent(new Event("input"));
+  depthScale.dispatchEvent(new Event("input"));
+  speedScale.dispatchEvent(new Event("input"));
+  scaleScale.dispatchEvent(new Event("input"));
 }
