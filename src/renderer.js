@@ -69,7 +69,7 @@ export function drawScene() {
   gl.uniform3f(scaleLoc, state.scale, state.scale, state.scale);
 
   // ----------------------------------------------------
-  // NEW FULL 3D ROTATION MATRIX
+  // 3D ROTATION MATRIX
   // ----------------------------------------------------
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
 
@@ -88,32 +88,4 @@ export function drawScene() {
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
-}
-
-// ----------------------------------------------------
-// Rotation helpers
-// ----------------------------------------------------
-
-function radians(d) { return d * Math.PI / 180; }
-
-function rotateX(a) {
-  let c = Math.cos(radians(a));
-  let s = Math.sin(radians(a));
-  return mat4(
-    1, 0, 0, 0,
-    0, c, -s, 0,
-    0, s,  c, 0,
-    0, 0, 0, 1
-  );
-}
-
-function rotateY(a) {
-  let c = Math.cos(radians(a));
-  let s = Math.sin(radians(a));
-  return mat4(
-     c, 0, s, 0,
-     0, 1, 0, 0,
-    -s, 0, c, 0,
-     0, 0, 0, 1
-  );
 }
