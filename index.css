@@ -45,6 +45,7 @@ body {
 }
 
 #ui-panel {
+  font-family: "Roboto Condensed", sans-serif;
   width: 16.5rem;
   padding: 20px;
   background: #1e1e1e;
