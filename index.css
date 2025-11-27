@@ -11,6 +11,7 @@ button {
 
 button:hover {
   background-color: #3a63d9;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
   transform: translateY(-1px);
 }
 
@@ -50,7 +51,7 @@ body {
   border-radius: 10px;
   border-left: 2px solid #444;
   box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(5px);
 }
 
@@ -63,12 +64,39 @@ body {
   margin-bottom: 14px;
 }
 
+input[type="range"] {
+  accent-color: #4c79ff;
+  height: 4px;
+}
+
+input[type="color"] {
+  width: 40px;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  border: 2px solid #aaa;
+  background: #222;
+}
+
+input[type="color"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.colorText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
 #startBtn {
   background-color: #04aa6d;
 }
 
 #startBtn:hover {
   background-color: #2ecf8b;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
   transform: translateY(-1px);
 }
 
