@@ -8,7 +8,9 @@ import { createProgramFromSources } from "./utils/shaderUtils.js";
 let gl, program, geometry;
 let currentDepth = 1.0;
 
+// Window onload (Initialization)
 window.onload = async () => {
+  // Iitialize WebGL context
   const canvas = document.getElementById("gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas);
 
@@ -16,13 +18,16 @@ window.onload = async () => {
   const vsSource = await loadText("src/shaders/vertexShader.glsl");
   const fsSource = await loadText("src/shaders/fragmentShader.glsl");
 
+  // Create Shader program
   program = createProgramFromSources(gl, vsSource, fsSource);
   gl.useProgram(program);
 
+  // Build initial logo geometry
   geometry = buildWord("TV1", 1.0);
   initRenderer(gl, program, geometry);
   resizeCanvas();
 
+  // Setup UI Control (slider, colour picker & button)
   setupUI(
     // onDepthChange
     (depth) => {
@@ -38,20 +43,23 @@ window.onload = async () => {
     }
   );
 
+  // Start main animation loop
   requestAnimationFrame(loop);
 };
 
 function loop(t) {
-  animate(t);
-  drawScene();
+  animate(t);                   // Update animation state
+  drawScene();                  // Draw new frame
   requestAnimationFrame(loop);
 }
 
+// Canvas resize handling
 function resizeCanvas() {
   const canvas = gl.canvas;
   const displayWidth = canvas.clientWidth;
   const displayHeight = canvas.clientHeight;
 
+  // Resize only when needed
   if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
     canvas.width = displayWidth;
     canvas.height = displayHeight;

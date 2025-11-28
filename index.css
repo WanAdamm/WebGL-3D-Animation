@@ -9,6 +9,7 @@ button {
   transition: 0.2s ease-in-out;
 }
 
+
 button:hover {
   background-color: #3a63d9;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
@@ -110,4 +111,10 @@ input[type="color"]:hover {
   background-color: #cccccc;
   cursor: not-allowed;
   transform: none;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #003BE0 0%, #E00019 100%);
+  background-attachment: fixed;
 }

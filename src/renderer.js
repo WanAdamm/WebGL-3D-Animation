@@ -1,8 +1,10 @@
+// renderer.js
 import { state } from "./animation.js";
 
 let gl, program;
 let buffers = {};
 
+// Pass geometry to GPU
 export function initRenderer(_gl, _program, geometry) {
   gl = _gl;
   program = _program;
@@ -45,39 +47,64 @@ export function initRenderer(_gl, _program, geometry) {
     gl.STATIC_DRAW
   );
 
+  // Store geometry for animation.js
+  window.tv1Vertices = geometry.vertices;
+
+  // Render default
   gl.enable(gl.DEPTH_TEST);
   gl.clearColor(1, 1, 1, 1); // white background like TV1
 }
 
+// Draw single frame
 export function drawScene() {
+  // Clear Buffer
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  // Build ModelView (Object movement)
+  let modelView = mat4();
+
+  if (state.phase === 7) {
+    // only trnalate when bouncing
+    modelView = mult(modelView, translate(state.posX, state.posY, 0.0));
+  }
+
+  // Upload ModelView
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uModelView"),
     false,
-    flatten(mat4())
+    flatten(modelView)
   );
 
+  // Projection matrix (no perspective)
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uProjection"),
     false,
     flatten(mat4())
   );
 
-  // scale
+  const proj = mat4();
+  gl.uniformMatrix4fv(
+      gl.getUniformLocation(program, "uProjection"),
+      false,
+      flatten(proj)
+  );
+
+  // Store projection matrix globally for animation bounding
+  window.tv1Projection = proj;
+
+
+  // Scale (same as original)
   const scaleLoc = gl.getUniformLocation(program, "uScale");
   gl.uniform3f(scaleLoc, state.scale, state.scale, state.scale);
 
-  // ----------------------------------------------------
-  // 3D ROTATION MATRIX
-  // ----------------------------------------------------
+  // Rotation (same as original)
   const uRotationLoc = gl.getUniformLocation(program, "uRotation");
 
-  let R_z = rotate(state.rotationZ, [0, 0, 1]); // main rotation
-
+  // Z rotation (The spin)
+  let R_z = rotate(state.rotationZ, [0, 0, 1]);
   let R = R_z;
 
-  // During idle loop, add globe tilt:
+  // Tilt rotation in phase 7
   if (state.phase === 7) {
     let R_y = rotateY(state.rotationY);
     let R_x = rotateX(state.rotationX);
@@ -86,5 +113,6 @@ export function drawScene() {
 
   gl.uniformMatrix4fv(uRotationLoc, false, flatten(R));
 
+  // Draw element
   gl.drawElements(gl.TRIANGLES, buffers.indexCount, gl.UNSIGNED_SHORT, 0);
 }

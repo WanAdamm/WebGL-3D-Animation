@@ -1,14 +1,14 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  MV.js
-//
-//////////////////////////////////////////////////////////////////////////////
+// The core math Library used fot WebGL Matrix + Vector Application
+// Include vec2/vec3/vec4, mat2/mat3/mat4
+// Include rotation and translations
+// Scaling and projection matrices
 
-//----------------------------------------------------------------------------
+/* NOTES!! : THIS FILE SHOULD REMAIN UNTOUCHED. PARTS OF PROJECT RELY ON THESE FUNCTION
+/            TO WORKED AS DEFINED.*/
 
-//
-// Helper Functions
-//
+// ----------------------------------------------------------------------
+// 1. Buffer Helper
+// 1.1 Internal float buffer
 function MVbuffer(size) {
   var b = {};
   b.buf = new Float32Array(size);
@@ -23,21 +23,25 @@ function MVbuffer(size) {
   return b;
 }
 
+// ----------------------------------------------------------------------
+// 2. Vector & Matrix Type Checker
+// 2.1 Detect vec2/3/4
 function isVector(v) {
   if (v.type == "vec2" || v.type == "vec3" || v.type == "vec4") return true;
   return false;
 }
 
+// 2.2 Detect mat2/3/4
 function isMatrix(v) {
   if (v.type == "mat2" || v.type == "mat3" || v.type == "mat4") return true;
   return false;
 }
 
+// ----------------------------------------------------------------------
+// 3. Convert degrees to radians
 function radians(degrees) {
   return (degrees * Math.PI) / 180.0;
 }
-
-//----------------------------------------------------------------------------
 
 function patch() {
   var out = new Array(4);
@@ -51,10 +55,10 @@ function curve() {
   out.type = "curve";
   return out;
 }
-//
-//  Vector Constructors
-//
 
+// ----------------------------------------------------------------------
+// 4. Contructors
+// 4.1 Vectors
 function vec2() {
   var out = new Array(2);
   out.type = "vec2";
@@ -80,8 +84,6 @@ function vec2() {
 }
 
 function vec3() {
-  //var result = _argumentsToArray( arguments );
-
   var out = new Array(3);
   out.type = "vec3";
 
@@ -178,11 +180,7 @@ function vec4() {
   }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Matrix Constructors
-//
-
+// 4.2 Matrices
 function mat2() {
   var out = new Array(2);
   out[0] = new Array(2);
@@ -215,8 +213,6 @@ function mat2() {
 
   return out;
 }
-
-//----------------------------------------------------------------------------
 
 function mat3() {
   // v = _argumentsToArray( arguments );
@@ -258,11 +254,7 @@ function mat3() {
   return out;
 }
 
-//----------------------------------------------------------------------------
-
 function mat4() {
-  //var v = _argumentsToArray( arguments );
-
   var out = new Array(4);
   out[0] = new Array(4);
   out[1] = new Array(4);
@@ -314,11 +306,9 @@ function mat4() {
   return out;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Generic Mathematical Operations for Vectors and Matrices
-//
-
+// ----------------------------------------------------------------------
+// 5. Generic Mathematical Operations for Vectors and Matrices
+// 5.1 Check if 2 metices or vector are equal
 function equal(u, v) {
   if (!((isMatrix(u) && isMatrix(v)) || (isVector(u) && isVector(v))))
     throw "equal: at least one input not a vec or mat";
@@ -334,8 +324,7 @@ function equal(u, v) {
   }
 }
 
-//----------------------------------------------------------------------------
-
+// 5.2 Element Addition
 function add(u, v) {
   if (u.type != v.type) {
     throw "add(): trying to add different types";
@@ -360,8 +349,7 @@ function add(u, v) {
   }
 }
 
-//----------------------------------------------------------------------------
-
+// 5.3 Element subtraction
 function subtract(u, v) {
   if (u.type != v.type) {
     throw "add(): trying to add different types";
@@ -388,8 +376,7 @@ function subtract(u, v) {
   }
 }
 
-//----------------------------------------------------------------------------
-
+// 5.4 Scalar,matrix,vector multiply
 function mult(u, v) {
   if (typeof u == "number" && (isMatrix(v) || isVector(v))) {
     if (isVector(v)) {
@@ -466,11 +453,8 @@ function mult(u, v) {
   throw "mult(): trying to mult incompatible types";
 }
 
-//----------------------------------------------------------------------------
-//
-//  Basic Transformation Matrix Generators
-//
-
+// ----------------------------------------------------------------------
+// 6. Basic Transformation Matrix Generators
 function translate(x, y, z) {
   if (arguments.length != 2 && arguments.length != 3) {
     throw "translate(): not a mat3 or mat4";
@@ -490,8 +474,6 @@ function translate(x, y, z) {
 
   return result;
 }
-
-//----------------------------------------------------------------------------
 
 function rotate(angle, axis) {
   if (axis.length == 3) {
@@ -601,7 +583,6 @@ function rotateZ(theta) {
   );
   return rz;
 }
-//----------------------------------------------------------------------------
 
 function scale() {
   // legacy code
@@ -628,11 +609,9 @@ function scale() {
   throw "scale: wrong arguments";
 }
 
-//----------------------------------------------------------------------------
-//
-//  ModelView Matrix Generators
-//
-
+// ----------------------------------------------------------------------
+// 7. Camera & Projecrion
+// 7.1 ModelView Matrix Generators
 function lookAt(eye, at, up) {
   if (eye.type != "vec3") {
     throw "lookAt(): first parameter [eye] must be an a vec3";
@@ -677,11 +656,7 @@ function lookAt(eye, at, up) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Projection Matrix Generators
-//
-
+// 7.2 Orthographic Projection
 function ortho(left, right, bottom, top, near, far) {
   if (left == right) {
     throw "ortho(): left and right are equal";
@@ -711,8 +686,7 @@ function ortho(left, right, bottom, top, near, far) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-
+// 7.3 Perspective projection
 function perspective(fovy, aspect, near, far) {
   var f = 1.0 / Math.tan(radians(fovy) / 2);
   var d = far - near;
@@ -728,11 +702,8 @@ function perspective(fovy, aspect, near, far) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Matrix Functions
-//
-
+// ----------------------------------------------------------------------
+// 8. Matrix Functions
 function transpose(m) {
   if (m.type == "patch") {
     var out = patch();
@@ -790,11 +761,8 @@ function transpose(m) {
   }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Vector Functions
-//
-
+// ----------------------------------------------------------------------
+// 9. Vector Functions
 function dot(u, v) {
   if (u.type != v.type) {
     throw "dot(): types are not the same ";
@@ -810,8 +778,6 @@ function dot(u, v) {
   return sum;
 }
 
-//----------------------------------------------------------------------------
-
 function negate(u) {
   if (u.type != "vec2" && u.type != "vec3" && u.type != "vec4") {
     throw "negate(): not a vector ";
@@ -823,8 +789,6 @@ function negate(u) {
   }
   return result;
 }
-
-//----------------------------------------------------------------------------
 
 function cross(u, v) {
   if (u.type == "vec3" && v.type == "vec3") {
@@ -848,13 +812,9 @@ function cross(u, v) {
   throw "cross: types aren't matched vec3 or vec4";
 }
 
-//----------------------------------------------------------------------------
-
 function length(u) {
   return Math.sqrt(dot(u, u));
 }
-
-//----------------------------------------------------------------------------
 
 function normalize(u, excludeLastComponent) {
   if (u.type != "vec3" && u.type != "vec4") {
@@ -895,8 +855,6 @@ function normalize(u, excludeLastComponent) {
   }
 }
 
-//----------------------------------------------------------------------------
-
 function mix(u, v, s) {
   if (typeof s !== "number") {
     throw "mix: the last paramter " + s + " must be a number";
@@ -917,11 +875,10 @@ function mix(u, v, s) {
   return result;
 }
 
-//----------------------------------------------------------------------------
-//
-// Vector and Matrix utility functions
-//
 
+// (REPAIRED FROM 8)
+// Vector and Matrix utility functions
+// Convert Matrices/vectors to float32
 function flatten(v) {
   if (isVector(v)) {
     var floats = new Float32Array(v.length);
@@ -977,8 +934,8 @@ function printm(m) {
       throw "printm: not a matrix";
   }
 }
-// determinants
 
+// Determinants Functions
 function det2(m) {
   return m[0][0] * m[1][1] - m[0][1] * m[1][0];
 }
@@ -1030,10 +987,7 @@ function det(m) {
   if (m.length == 4) return det4(m);
 }
 
-//---------------------------------------------------------
-
-// inverses
-
+// Inverses Function
 function inverse2(m) {
   var a = mat2();
   var d = det2(m);
@@ -1183,10 +1137,7 @@ function inverse(m) {
   if (m.length == 4) return inverse4(m);
 }
 
-//---------------------------------------------------------
-
-// normal matrix
-
+// Normal matrix
 function normalMatrix(m, flag) {
   if (m.type != "mat4") throw "normalMatrix: input not a mat4";
   var a = inverse(transpose(m));

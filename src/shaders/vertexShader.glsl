@@ -1,26 +1,32 @@
+// Transforms each vertex
+// Applies rotation and scalling
+// Add normals and colours to fragment shader.
+
 attribute vec3 aPosition;
 attribute vec3 aNormal;
 attribute vec4 aColor;
 
-uniform mat4 uModelView;
-uniform mat4 uProjection;
-uniform mat4 uRotation;
-uniform vec3 uScale;
+uniform mat4 uModelView;    // Position and orientation of whole object
+uniform mat4 uProjection;   // Control how 3D to 2D Projection (Clipping)
+uniform mat4 uRotation;     // Mainly to rotate the object
+uniform vec3 uScale;        // Mainly to scale the object
 
-varying vec3 vNormal;
-varying vec4 vColor;
+varying vec3 vNormal;       // Normal in view (For lighting)
+varying vec4 vColor;        // vertex Colour
 
 void main() {
+    // Scalling
     vec3 scaled = aPosition * uScale;
 
-    // apply object rotation
+    // Rotation
     vec4 rotatedPos = uRotation * vec4(scaled, 1.0);
 
-    // final position
+    // Clip-space position
     gl_Position = uProjection * uModelView * rotatedPos;
 
-    // normal must be rotated the same way
+    // Rotate the normal (But we ignore translation here)
     vNormal = normalize(mat3(uRotation) * aNormal);
 
+    // Pass Colour
     vColor = aColor;
 }

@@ -1,16 +1,13 @@
-import {
-  startAnimation,
-  setSpeed,
-  resetAnimation,
-  setScale,
-} from "./animation.js";
+import {startAnimation, setSpeed, resetAnimation, setScale,} from "./animation.js";
 
+// Default colour values for letter (used in geometry builder)
 export const letterColorsUI = {
   T: [0.0, 0.23, 0.8, 1.0],
   V: [0.0, 0.18, 0.65, 1.0],
   One: [0.9, 0.05, 0.1, 1.0],
 };
 
+// Convert hex colour into RGB (in colour picker)
 function hexToRGBA(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [
@@ -21,6 +18,7 @@ function hexToRGBA(hex) {
   ];
 }
 
+// Setup slider, colour picker & button
 export function setupUI(onDepthChange, onRebuildGeometry) {
   const depth = document.getElementById("extrudeDepth");
   const depthValue = document.getElementById("depthValue");

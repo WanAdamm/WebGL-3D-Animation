@@ -1,3 +1,5 @@
+// Create WebGL shader program
+// From raw GLSL text
 export function createProgramFromSources(gl, vsSource, fsSource) {
   const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -7,6 +9,7 @@ export function createProgramFromSources(gl, vsSource, fsSource) {
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
 
+  // Check linking error (if any)
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     console.error("Program link error:", gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
@@ -16,11 +19,13 @@ export function createProgramFromSources(gl, vsSource, fsSource) {
   return program;
 }
 
+// Compile single shader
 function compileShader(gl, type, src) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, src);
   gl.compileShader(shader);
 
+  // Check compile error (if any)
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.error("Shader compile error:", gl.getShaderInfoLog(shader));
     console.error("Source:", src);
