@@ -93,7 +93,12 @@ input[type="color"]:hover {
 }
 
 #startBtn {
-  background-color: #04aa6d;
+  width: 160px;         
+  display: flex;        
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto 0;
+  text-align: center;    
 }
 
 #startBtn:hover {
