@@ -64,7 +64,7 @@ export function drawScene() {
   let modelView = mat4();
 
   if (state.phase === 7) {
-    // only trnalate when bouncing
+    // only translate when bouncing
     modelView = mult(modelView, translate(state.posX, state.posY, 0.0));
   }
 
