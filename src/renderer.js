@@ -76,10 +76,11 @@ export function drawScene() {
   );
 
   // Projection matrix (no perspective)
+  const proj = mat4();
   gl.uniformMatrix4fv(
-    gl.getUniformLocation(program, "uProjection"),
-    false,
-    flatten(mat4())
+      gl.getUniformLocation(program, "uProjection"),
+      false,
+      flatten(proj)
   );
 
   // Store projection matrix globally for animation bounding
