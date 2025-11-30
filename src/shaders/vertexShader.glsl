@@ -2,9 +2,9 @@
 // Applies rotation and scalling
 // Add normals and colours to fragment shader.
 
-attribute vec3 aPosition;
-attribute vec3 aNormal;
-attribute vec4 aColor;
+attribute vec3 aPosition;   // 3D coordinate of each vertex
+attribute vec3 aNormal;     // surface normal of each vertex
+attribute vec4 aColor;      // store the vertex RGBA color
 
 uniform mat4 uModelView;    // Position and orientation of whole object
 uniform mat4 uProjection;   // Control how 3D to 2D Projection (Clipping)
